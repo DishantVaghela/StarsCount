@@ -188,38 +188,37 @@
 				);
 			}
 			const Numbers = (props) => {
-				
-			  const numberClassName = (number) => {
-				if (props.usedNumbers.indexOf(number)>=0){
-					return 'used';
+				const numberClassName = (number) => {
+					if (props.usedNumbers.indexOf(number)>=0){
+						return 'used';
+					}
+					if (props.selectedNumbers.indexOf(number)>=0){
+						return 'selected';
+					}
 				}
-				if (props.selectedNumbers.indexOf(number)>=0){
-					return 'selected';
-				}
-			  }
 				return (
 					<div className="card text-center">
-					  <div>
-					{Numbers.list.map((number,i) => 
-						<span key={i} className={numberClassName(number)}
-								onClick={() => props.selectNumbers(number)}>
-						{number}
-					  </span>
-					)}
+						<div>
+							{Numbers.list.map((number,i) => 
+								<span key={i} className={numberClassName(number)}
+									onClick={() => props.selectNumbers(number)}>
+									{number}
+								</span>
+							)}
 						</div>
 					</div>
-			  );
+				);
 			}
 			Numbers.list=_.range(1,10);
 			const DoneFrame = (props) => {
 				return (
 					<div className="text-center">
-					  <h2>{props.doneStatus}</h2>
-				  <button className="btn btn-secondary" onClick={props.resetGame}>
-					play again!
-				  </button>
+						<h2>{props.doneStatus}</h2>
+						<button className="btn btn-secondary" onClick={props.resetGame}>
+							play again!
+						</button>
 					</div>
-			  );
+				);
 			}
 			ReactDOM.render(<App />, document.getElementById("app"));
 		</script>
