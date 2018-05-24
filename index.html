@@ -28,172 +28,167 @@
 			}
 			class Game extends React.Component {
 				static initialState = () => ({
-				selectedNumbers: [],
-				randomNumberOfStars: 1 + Math.floor(Math.random()*9),
-				usedNumbers: [],
-				answerIsCorrect: null,
-				redraws: 10,
-				doneStatus: null,
-			  })
-			  state = Game.initialState();
-			  resetGame = () => this.setState(Game.initialState());
-			  selectNumbers = (clickedNumber) => {
-				if (this.state.selectedNumbers.indexOf(clickedNumber)>=0){
-					return;
-				}
-				this.setState(prevState => ({
-					answerIsCorrect: null,
-					selectedNumbers: prevState.selectedNumbers.concat(clickedNumber)
-				}))
-			  }
-			  unSelectNumbers = (clickedNumber) => {
-				this.setState(prevState => ({
-					answerIsCorrect: null,
-					selectedNumbers: prevState.selectedNumbers.filter(number => number !== clickedNumber)
-				}))
-			  }
-			  checkAnswer = () => {
-				this.setState(prevState => ({
-					answerIsCorrect: prevState.randomNumberOfStars === 																											prevState.selectedNumbers.reduce((acc, n) => acc + n, 0)
-				}))
-			  }
-			  acceptAnswer = () => {
-				this.setState(prevState => ({
-					usedNumbers: prevState.usedNumbers.concat(prevState.selectedNumbers),
-				  selectedNumbers: [],
-				  answerIsCorrect: null,
-				  randomNumberOfStars: 1 + Math.floor(Math.random()*9)
-				}), this.updateDoneStatus)
-			  };
-			  redraw = () => {
-				if(this.state.redraws===0) {return;};
-				this.setState(prevState => ({
 					selectedNumbers: [],
-				  answerIsCorrect: null,
-				  randomNumberOfStars: 1 + Math.floor(Math.random()*9),
-				  redraws: prevState.redraws - 1,
-				}), this.updateDoneStatus)
-			  }
-			  possibleSolutions  = ({randomNumberOfStars, usedNumbers}) => {
-				const possibleNumbers = _.range(1, 10).filter(number => 
-					usedNumbers.indexOf(number) === -1
-				);
-				return possibleCombinationSum(possibleNumbers, randomNumberOfStars);
-			  }
-			  updateDoneStatus = () => {
-				this.setState(prevState => {
-					if (prevState.usedNumbers.length === 9) {
-				   return {doneStatus: 'you win!'}
-				  }
-				  if (prevState.redraws === 0 && !this.possibleSolutions(prevState)) {
-				   return {doneStatus: 'you lose!'}
-				  }
-				  answerIsCorrect: prevState.randomNumberOfStars === 																											prevState.selectedNumbers.reduce((acc, n) => acc + n, 0)
+					randomNumberOfStars: 1 + Math.floor(Math.random()*9),
+					usedNumbers: [],
+					answerIsCorrect: null,
+					redraws: 10,
+					doneStatus: null,
 				})
-			  }
+				state = Game.initialState();
+				resetGame = () => this.setState(Game.initialState());
+				selectNumbers = (clickedNumber) => {
+					if (this.state.selectedNumbers.indexOf(clickedNumber)>=0){
+						return;
+					}
+					this.setState(prevState => ({
+						answerIsCorrect: null,
+						selectedNumbers: prevState.selectedNumbers.concat(clickedNumber)
+					}))
+				}
+				unSelectNumbers = (clickedNumber) => {
+					this.setState(prevState => ({
+						answerIsCorrect: null,
+						selectedNumbers: prevState.selectedNumbers.filter(number => number !== clickedNumber)
+					}))
+				}
+				checkAnswer = () => {
+					this.setState(prevState => ({
+						answerIsCorrect: prevState.randomNumberOfStars === 																											prevState.selectedNumbers.reduce((acc, n) => acc + n, 0)
+					}))
+				}
+				acceptAnswer = () => {
+					this.setState(prevState => ({
+						usedNumbers: prevState.usedNumbers.concat(prevState.selectedNumbers),
+						selectedNumbers: [],
+						answerIsCorrect: null,
+						randomNumberOfStars: 1 + Math.floor(Math.random()*9)
+					}), this.updateDoneStatus)
+				};
+				redraw = () => {
+					if(this.state.redraws===0) {return;};
+					this.setState(prevState => ({
+						selectedNumbers: [],
+						answerIsCorrect: null,
+						randomNumberOfStars: 1 + Math.floor(Math.random()*9),
+						redraws: prevState.redraws - 1,
+					}), this.updateDoneStatus)
+				}
+				possibleSolutions  = ({randomNumberOfStars, usedNumbers}) => {
+					const possibleNumbers = _.range(1, 10).filter(number => 
+						usedNumbers.indexOf(number) === -1
+					);
+					return possibleCombinationSum(possibleNumbers, randomNumberOfStars);
+				}
+				updateDoneStatus = () => {
+					this.setState(prevState => {
+						if (prevState.usedNumbers.length === 9) {
+							return {doneStatus: 'you win!'}
+						}
+						if (prevState.redraws === 0 && !this.possibleSolutions(prevState)) {
+							return {doneStatus: 'you lose!'}
+						}
+						answerIsCorrect: prevState.randomNumberOfStars === 																											prevState.selectedNumbers.reduce((acc, n) => acc + n, 0)
+					})
+				}
 				render () { 
-				const { 
-					selectedNumbers, 
-				  randomNumberOfStars, 
-				  answerIsCorrect,
-				  usedNumbers,
-				  redraws,
-				  doneStatus,
-				} = this.state;
-				return (
-					<div className="container">
-						<h3>Play Stars Count Game</h3>
-					  <div className="row">
-						<Stars numberOfStars={this.state.randomNumberOfStars}/>
-						<Button selectedNumbers={this.state.selectedNumbers}
-										checkAnswer={this.checkAnswer}
-								acceptAnswer={this.acceptAnswer}
-								redraw={this.redraw}
-								redraws={redraws}
-								answerIsCorrect={answerIsCorrect}/> 
-						<Answer selectedNumbers={this.state.selectedNumbers}
-										unSelectNumbers={this.unSelectNumbers}/>
-					  </div>  
-					  <br/>
-					  {doneStatus ?
-						<DoneFrame resetGame={this.resetGame} doneStatus={doneStatus}/> :
-						<Numbers selectedNumbers={this.state.selectedNumbers} 
-										selectNumbers={this.selectNumbers}
-								  usedNumbers={usedNumbers}/>
-					  }
-					   <br/>                  
-				  </div>
-				);
-			  }
+					const { 
+						selectedNumbers, 
+						randomNumberOfStars, 
+						answerIsCorrect,
+						usedNumbers,
+						redraws,
+						doneStatus,
+					} = this.state;
+					return (
+						<div className="container">
+							<h3>Play Stars Count Game</h3>
+							<div className="row">
+								<Stars numberOfStars={this.state.randomNumberOfStars}/>
+								<Button selectedNumbers={this.state.selectedNumbers}
+									checkAnswer={this.checkAnswer}
+									acceptAnswer={this.acceptAnswer}
+									redraw={this.redraw}
+									redraws={redraws}
+									answerIsCorrect={answerIsCorrect}/> 
+								<Answer selectedNumbers={this.state.selectedNumbers}
+									unSelectNumbers={this.unSelectNumbers}/>
+							</div>  
+							<br/>
+							{doneStatus ?
+								<DoneFrame resetGame={this.resetGame} doneStatus={doneStatus}/> :
+								<Numbers selectedNumbers={this.state.selectedNumbers} 
+							selectNumbers={this.selectNumbers}
+							usedNumbers={usedNumbers}/>
+							}
+							<br/>                  
+						</div>
+					);
+				}
 			}
 			var possibleCombinationSum = function(arr, n) {
-			  if (arr.indexOf(n) >= 0) { return true; }
-			  if (arr[0] > n) { return false; }
-			  if (arr[arr.length - 1] > n) {
-				arr.pop();
-				return possibleCombinationSum(arr, n);
-			  }
-			  var listSize = arr.length, combinationsCount = (1 << listSize)
-			  for (var i = 1; i < combinationsCount ; i++ ) {
-				var combinationSum = 0;
-				for (var j=0 ; j < listSize ; j++) {
-				  if (i & (1 << j)) { combinationSum += arr[j]; }
+				if (arr.indexOf(n) >= 0) { return true; }
+				if (arr[0] > n) { return false; }
+				if (arr[arr.length - 1] > n) {
+					arr.pop();
+					return possibleCombinationSum(arr, n);
 				}
-				if (n === combinationSum) { return true; }
-			  }
-			  return false;
+				var listSize = arr.length, combinationsCount = (1 << listSize)
+				for (var i = 1; i < combinationsCount ; i++ ) {
+					var combinationSum = 0;
+					for (var j=0 ; j < listSize ; j++) {
+						if (i & (1 << j)) { combinationSum += arr[j]; }
+					}
+					if (n === combinationSum) { return true; }
+				}
+				return false;
 			};
 			const Stars = (props) => {
-				// const numberOfStars = 1 + Math.floor(Math.random()*9);
-			  // let stars = [];
-			  // for (let i=0; i<numberOfStars; i++) {
-			  // 	stars.push(<i key={i} className="fa fa-star"></i>);
-			  // }
-			  return (
+				return (
 					<div className="col-5">
-					{_.range(props.numberOfStars).map((number,i) => 
-					<i key={i} className="fa fa-star"></i>
-				  )}
-				</div>
-			  );
+						{_.range(props.numberOfStars).map((number,i) => 
+							<i key={i} className="fa fa-star"></i>
+						)}
+					</div>
+				);
 			}
 			const Button = (props) => {
 				let button;
-			  switch(props.answerIsCorrect) {
-				case true:
-					button = <button className="btn btn-success" onClick={props.acceptAnswer}><i className="fa fa-check"></i></button>;
-					break;
-				case false:
-					button = <button className="btn btn-danger"><i className="fa fa-times"></i></button>;
-					break;
-				default:
-					button = <button className="btn" onClick={props.checkAnswer} disabled={props.selectedNumbers.length===0}>=</button>;
+				switch(props.answerIsCorrect) {
+					case true:
+						button = <button className="btn btn-success" onClick={props.acceptAnswer}><i className="fa fa-check"></i></button>;
 						break;
-			  }
+					case false:
+						button = <button className="btn btn-danger"><i className="fa fa-times"></i></button>;
+						break;
+					default:
+						button = <button className="btn" onClick={props.checkAnswer} disabled={props.selectedNumbers.length===0}>=</button>;
+						break;
+				}
 				return (
 					<div className="col-2 text-center">
-					  {button}
-				  <br/>
-				  <br/>
-				  <button className="btn btn-warning btn-sm" onClick={props.redraw} 
-								disabled={props.redraws === 0}>
-				   <i className="fa">&#xf021;</i> {props.redraws}
-				  </button>
+						{button}
+						<br/>
+						<br/>
+						<button className="btn btn-warning btn-sm" onClick={props.redraw} 
+							disabled={props.redraws === 0}>
+							<i className="fa">&#xf021;</i> {props.redraws}
+						</button>
 					</div>
-			  );
+				);
 			}
 			const Answer = (props) => {
 				return (
 					<div className="col-5">
-					  {props.selectedNumbers.map((number, i) =>
-					<span key={i} 
-								onClick={() => props.unSelectNumbers(number)}>{number}</span>
-				  )}
+						{props.selectedNumbers.map((number, i) =>
+							<span key={i} 
+							onClick={() => props.unSelectNumbers(number)}>{number}</span>
+						)}
 					</div>
-			  );
+				);
 			}
 			const Numbers = (props) => {
-				// const arrayOfNumbers=_.range(1,10);
+				
 			  const numberClassName = (number) => {
 				if (props.usedNumbers.indexOf(number)>=0){
 					return 'used';
